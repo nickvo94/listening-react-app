@@ -1,0 +1,14 @@
+.container{
+    display: grid;
+    align-items: center;
+    margin: 0 auto;
+}
+.row{margin: auto;}
+.react-player{margin: 1em auto;z-index: 0;pointer-events: none;}
+.overlay{
+    z-index: 100;
+    background: rgba(255,255,255,.5);
+    -webkit-user-select: none;  /* Chrome all / Safari all */
+    -moz-user-select: none;     /* Firefox all */
+    -ms-user-select: none;      /* IE 10+ */
+}
