@@ -19,7 +19,7 @@
           <Router>
             
               <Navbar expand="true" bg="dark" variant="dark" sticky="top">
-                <Navbar.Brand href="#home">Listening App</Navbar.Brand>
+                <Navbar.Brand href="/">Listening App</Navbar.Brand>
               </Navbar>
             
 

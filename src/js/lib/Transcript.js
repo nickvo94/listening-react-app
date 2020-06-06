@@ -9,7 +9,7 @@ const CAPTION_URL = {
     part1: 'https://video.google.com/timedtext?lang=', 
     part2: '&v='
 }
-const transcript = []
+var transcript = []
 
 export default class Transcript {
     constructor(vid_id){
@@ -44,16 +44,24 @@ export default class Transcript {
                 this.parseTranscript(obj)
 
             }else{console.log('None or More than 1 standard tracks')}
-        }       
+        }
+        return await transcript;       
     }
     parseTranscript = (obj) => {
         var _element = obj.elements
+        transcript = []
         console.log(_element)
         if(_element.length > 1){
             _element.forEach(e => {
+                var txt = this.detectUTF8(e.elements[0].text);
+                txt = txt.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
                 transcript.push({
-                    timeline: e.attributes, 
-                    text: this.detectUTF8(e.elements[0].text)
+                    timeline: {
+                        start: Number(e.attributes.start), 
+                        dur: Number(e.attributes.dur), 
+                        end: Number(e.attributes.start) + Number(e.attributes.dur),
+                    }, 
+                    text: txt
                 })    
             });
             console.log(transcript)
@@ -64,7 +72,7 @@ export default class Transcript {
     }
     detectUTF8 = (text) => {
         var res = text.match(/&#/);
-        var txt = "";
+        var txt;
         if(res){
             try {
                 txt = text.replace(/&#([0-9]{1,3});/gi, function(match, numStr) {
