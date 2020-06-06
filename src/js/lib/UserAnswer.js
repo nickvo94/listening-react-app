@@ -77,8 +77,8 @@ export default class UserAnswer extends Component {
                 <InputGroup className="m-3">
                     <FormControl
                     disabled={this.props.initial || this.props.save}
-                    placeholder="User's Answer"
-                    aria-label="User's Answer"
+                    placeholder="Your Answer"
+                    aria-label="Your Answer"
                     aria-describedby="basic-addon2"
                     value={this.state.value}
                     onChange={this.handleChange.bind(this)}
