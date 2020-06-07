@@ -7,7 +7,7 @@ import Transcript from '../lib/Transcript'
 import UserAnswer from '../lib/UserAnswer'
 import Progress from '../lib/Progress'
 
-const playTextObj = {true: 'Play' , false: 'Pause'};
+const playTextObj = {true: 'Play/Replay' , false: 'Pause'};
 const TIME = [{start: 3, end: 10}, {start: 14, end: 19}, {start: 22, end: 28}]
 var indexGLB = 0;
 
@@ -127,7 +127,7 @@ export default class WatchVideo extends Component {
                                     playerVars: {rel: 0, showinfo: 0, iv_load_policy: 3}
                                 },
                             }}
-                            controls={true}
+                            controls={false}
                             progressInterval={33}
                             onProgress={() => this.trackingOnPlay()}
                             onStart={() => {this.setState({trackingCheck: true})}}

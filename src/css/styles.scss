@@ -3,11 +3,11 @@
     align-items: center;
     margin: 0 auto;
 }
-.row{margin: auto;width: 100%;}
+.row{margin: auto !important;width: 100%;}
 .react-player{
     margin: 1em auto;
-    width: 58vw !important;
-    height: 42vh !important;
+    width: 36vw !important;
+    height: 40vh !important;
     z-index: 0;
     pointer-events: none;
 }
@@ -24,8 +24,9 @@
 }
 .badge{
     font-weight: normal !important;
-    padding: 0.4em 1.2em !important;
+    padding: 0.4em 1.1em !important;
     margin: auto;
+    white-space: normal;
 }
 .result{
     display: flex;
