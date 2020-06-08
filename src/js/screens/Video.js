@@ -116,7 +116,7 @@ export default class WatchVideo extends Component {
         return (
             <Col>
                 <Progress ref={progress => this.progress = progress }/>
-                <Row>
+                <Row className='video'>
                     <div className='overlay'>
                         <ReactPlayer
                             ref={this.player}
