@@ -1,14 +1,6 @@
 import xmljs from 'xml-js';
+import {YOUTUBE_VARS} from '../../App';
 
-const API_KEY = "AIzaSyB6Yp5ERdjG0XO5x0yYm489n9is4odm6v4";
-const VIDEO_URL = {
-    part1: 'https://www.googleapis.com/youtube/v3/captions?videoId=', 
-    part2: '&part=snippet&key='
-}
-const CAPTION_URL = {
-    part1: 'https://video.google.com/timedtext?lang=', 
-    part2: '&v='
-}
 var transcript = []
 
 export default class Transcript {
@@ -17,7 +9,8 @@ export default class Transcript {
     }
     async fetchTranscriptData () {
         const _vid_id = this.vid_id
-        const response = await fetch(VIDEO_URL.part1 + _vid_id + VIDEO_URL.part2 + API_KEY);
+        const response = await fetch(
+            YOUTUBE_VARS.VIDEO_URL.part1 + _vid_id + YOUTUBE_VARS.VIDEO_URL.part2 + YOUTUBE_VARS.API_KEY);
         const json = await response.json();
         console.log(json)
         var index = []
@@ -35,7 +28,7 @@ export default class Transcript {
             
             if(index.length == 1){
                 var _snippet = json.items[index[0]].snippet
-                const response2 = await fetch(CAPTION_URL.part1 + _snippet.language + CAPTION_URL.part2 + _vid_id);
+                const response2 = await fetch(YOUTUBE_VARS.CAPTION_URL.part1 + _snippet.language + YOUTUBE_VARS.CAPTION_URL.part2 + _vid_id);
                 const text = await response2.text();
 
                 const obj = xmljs.xml2js(text);

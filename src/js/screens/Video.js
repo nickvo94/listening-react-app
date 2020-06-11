@@ -2,14 +2,11 @@
 import React, { Component } from 'react';
 import ReactPlayer from 'react-player'
 import {Row, Col, ButtonGroup, Button} from 'react-bootstrap';
-//import ReactBootstrapSlider from 'react-bootstrap-slider';
 import Transcript from '../lib/Transcript'
 import UserAnswer from '../lib/UserAnswer'
 import Progress from '../lib/Progress'
 
-const playTextObj = {true: 'Play/Replay' , false: 'Pause'};
-const TIME = [{start: 3, end: 10}, {start: 14, end: 19}, {start: 22, end: 28}]
-var indexGLB = 0;
+//const TIME = [{start: 3, end: 10}, {start: 14, end: 19}, {start: 22, end: 28}]
 
 export default class WatchVideo extends Component {
 
@@ -19,11 +16,13 @@ export default class WatchVideo extends Component {
 
     constructor(props) {
         super(props);
+        this.playTextObj = {true: 'Play/Replay' , false: 'Pause'}; 
+
         this.state = {
             play: false,
             initial: true, 
-            playText: playTextObj.true,
-            scriptIndex: indexGLB,
+            playText: this.playTextObj.true,
+            scriptIndex: this.IdxProcess,
             endTime: null,
             startTime: null,
             duration: null,
@@ -34,6 +33,7 @@ export default class WatchVideo extends Component {
         this.player = React.createRef();
         this.script = null;
         this.transcript = new Transcript(this.props.location.state.video_id);
+        this.IdxProcess = 0;
 
         console.log(this.props);
     }
@@ -42,7 +42,7 @@ export default class WatchVideo extends Component {
             console.log(script)
             if(script.length){
                 this.script = script;
-                this.setState({endTime: this.script[indexGLB].timeline.end})
+                this.setState({endTime: this.script[this.IdxProcess].timeline.end})
             }else{
                 this.home()
             }
@@ -53,7 +53,7 @@ export default class WatchVideo extends Component {
     handleOnPlay(){
         //Only play the video func
         this.setState({
-            playText: playTextObj[this.state.play] , 
+            playText: this.playTextObj[this.state.play] , 
             play: !this.state.play,
         })
     }
@@ -81,15 +81,15 @@ export default class WatchVideo extends Component {
     }
     goToTrack(skip){
         if(skip){
-            indexGLB++;
-            this.progress.setProgress(indexGLB, this.script.length);
-            this.progress.setMaxScore(indexGLB + 1)
-            if(indexGLB > this.script.length - 1)indexGLB = 0;
-            var timeline = this.script[indexGLB].timeline
-            this.answ.setLine(this.script[indexGLB].text)
+            this.IdxProcess++;
+            this.progress.setProgress(this.IdxProcess, this.script.length);
+            this.progress.setMaxScore(this.IdxProcess + 1)
+            if(this.IdxProcess > this.script.length - 1)this.IdxProcess = 0;
+            var timeline = this.script[this.IdxProcess].timeline
+            this.answ.setLine(this.script[this.IdxProcess].text)
             console.log(timeline)
             this.setState({
-                scriptIndex: indexGLB,
+                scriptIndex: this.IdxProcess,
                 endTime: timeline.end,
                 startTime: timeline.start
             })
@@ -100,7 +100,7 @@ export default class WatchVideo extends Component {
                 this.player.current.seekTo(0)
                 
                 this.answ.setLine(this.script[0].text)
-                this.progress.setMaxScore(indexGLB + 1)
+                this.progress.setMaxScore(this.IdxProcess + 1)
                 this.setState({initial: false, startTime: this.script[0].timeline.start})
             }else{this.player.current.seekTo(this.state.startTime)}
             
@@ -162,9 +162,3 @@ export default class WatchVideo extends Component {
         );
     }
 }
-/* const styles = StyleSheet.create({
-    safeArea: {
-    flex: 1,
-    backgroundColor: '#fff'
-    }
-}); */
