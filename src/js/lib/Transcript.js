@@ -4,9 +4,11 @@ import {YOUTUBE_VARS} from '../../App';
 var transcript = []
 
 export default class Transcript {
+
     constructor(vid_id){
         this.vid_id = vid_id
     }
+
     async fetchTranscriptData () {
         const _vid_id = this.vid_id
         const response = await fetch(
@@ -14,19 +16,20 @@ export default class Transcript {
         const json = await response.json();
         console.log(json)
         var index = []
-        if(json){
+
+        if (json) {
             json.items.forEach((item, _indx) => {
                 var _lang = item.snippet.language.toLowerCase()
                 var _kind = item.snippet.trackKind.toLowerCase()
                 console.log(_lang, _kind)
                 
-                if(_lang.includes('en') || _lang.includes('gb')){
+                if (_lang.includes('en') || _lang.includes('gb')) {
                     if(_kind === 'standard'){index.push(_indx)}
                 }
             })
             console.log(index)
             
-            if(index.length == 1){
+            if (index.length == 1) {
                 var _snippet = json.items[index[0]].snippet
                 const response2 = await fetch(YOUTUBE_VARS.CAPTION_URL.part1 + _snippet.language + YOUTUBE_VARS.CAPTION_URL.part2 + _vid_id);
                 const text = await response2.text();
@@ -36,16 +39,17 @@ export default class Transcript {
 
                 this.parseTranscript(obj)
 
-            }else{console.log('None or More than 1 standard tracks')}
+            } else {console.log('None or More than 1 standard tracks')}
         }
         return await transcript;       
     }
+
     parseTranscript = (obj) => {
         var _element = obj.elements
         transcript = []
         console.log(_element)
-        if(_element.length > 1){
-            _element.forEach(e => {
+        if (_element.length > 1) {
+            _element.forEach (e => {
                 var txt = this.detectUTF8(e.elements[0].text);
                 txt = txt.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,"")
                 transcript.push({
@@ -59,24 +63,25 @@ export default class Transcript {
             });
             console.log(transcript)
 
-        }else{
+        } else {
             this.parseTranscript(_element[0])
         }
     }
+
     detectUTF8 = (text) => {
         var res = text.match(/&#/);
         var txt;
-        if(res){
+        if (res) {
             try {
                 txt = text.replace(/&#([0-9]{1,3});/gi, function(match, numStr) {
                     var num = parseInt(numStr, 10); // read num as normal number
                     return String.fromCharCode(num);
                 });
             } catch (e) {
-                console.log("Kamala virhe " + e);
+                console.log("Error: " + e);
             }
 
-        }else{txt = text}
+        } else {txt = text}
         
         console.log(txt);
         

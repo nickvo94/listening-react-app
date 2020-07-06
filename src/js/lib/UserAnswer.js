@@ -13,9 +13,12 @@ const initialState = {
 }
 
 export default class UserAnswer extends Component {
+
     constructor(props) {
         super(props);
         this.state = initialState;
+        this.passPoint = 50;
+        this.percentCoef = 100;
         //this.scriptLine = this.setLine.bind(this);
         
     }
@@ -26,18 +29,19 @@ export default class UserAnswer extends Component {
     handleChange(event){
         
         var answer = event.target.value;
-        var per = Math.round(stringSimilarity.compareTwoStrings(answer, scriptLine) * 100) 
+        var per = Math.round(stringSimilarity.compareTwoStrings(answer, scriptLine) * this.percentCoef) 
         answer = answer.toLowerCase() //.match(/\w+/g);
         this.setState({
             value: answer,
             percent: per
         });
-        if(per > 50)
+
+        if (per > this.passPoint)
         {
             this.setState({
                 pass: true
             });
-        }else{
+        } else {
             this.setState({
                 pass: false
             });
@@ -51,12 +55,14 @@ export default class UserAnswer extends Component {
    setLine(text){
         scriptLine = text.toLowerCase() //.match(/\w+/g);
     }
+
     setWordCount(){
         var count = scriptLine.split(' ').length
         console.log('length: ' + count)
         this.setState({wordCount: count});
 
     }
+    
     showResult(){this.setState({resultOpc: 1});}
 
     clear(){this.setState(initialState);}
